@@ -1,4 +1,4 @@
-package org.rapidpm.demo.jaxcenter.blog0005;
+package org.rapidpm.demo.jaxenter.blog0005;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -27,6 +27,7 @@ import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 
+import org.jboss.weld.environment.se.contexts.ThreadScoped;
 import org.rapidpm.demo.jaxenter.blog0005.locale.LocaleResolver;
 import org.rapidpm.demo.jaxenter.blog0005.property.PropertyResolver;
 
@@ -70,8 +71,8 @@ public class SimpleDateFormatterProducer {
 
             }
         }
-
         return createDefault(ip);
 
     }
+
 }
