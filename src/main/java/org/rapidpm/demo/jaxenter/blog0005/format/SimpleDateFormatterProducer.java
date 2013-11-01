@@ -16,8 +16,10 @@
 
 package org.rapidpm.demo.jaxenter.blog0005.format;
 
+import java.lang.annotation.Annotation;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
@@ -50,23 +52,27 @@ public class SimpleDateFormatterProducer {
 
     @Produces
     @CDISimpleDateFormatter
-    @ThreadScoped
     public java.text.SimpleDateFormat produceSimpleDateFormatter(InjectionPoint ip){
-        final Annotated annotated = ip.getAnnotated();
-        final Class<CDISimpleDateFormatter> type = CDISimpleDateFormatter.class;
-        final boolean present = annotated.isAnnotationPresent(type);
-        if (present) {
-            final CDISimpleDateFormatter annotation = annotated.getAnnotation(type);
-            final String ressourceKey = annotation.value();
-            final String ressource = propertyResolverInstance.get().resolveProperty(ressourceKey);
-            if (ressource.equals("###" + ressourceKey + "###")) {
-                return createDefault(ip);
-            } else {
-                final Locale locale = localeResolverInstance.get().resolveLocale();
-                return new SimpleDateFormat(ressource, locale);
+//        final Annotated annotated = ip.getAnnotated();
+//        final Class<CDISimpleDateFormatter> type = CDISimpleDateFormatter.class;
+
+        final Set<Annotation> qualifiers = ip.getQualifiers();
+        for (final Annotation qualifier : qualifiers) {
+            if(qualifier instanceof CDISimpleDateFormatter ){
+                final String ressourceKey = ((CDISimpleDateFormatter)qualifier).value();
+                final String ressource = propertyResolverInstance.get().resolveProperty(ressourceKey);
+                if (ressource.equals("###" + ressourceKey + "###")) {
+                    return createDefault(ip);
+                } else {
+                    final Locale locale = localeResolverInstance.get().resolveLocale();
+                    return new SimpleDateFormat(ressource, locale);
+                }
+            } else{
+
             }
-        } else {
-            return createDefault(ip);
         }
+        return createDefault(ip);
+
     }
+
 }
